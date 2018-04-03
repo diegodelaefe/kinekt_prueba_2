@@ -27,6 +27,7 @@ int max = 830;//1536; pa la pieza 830
 
 public void setup() {
   //frameRate(10);
+  //size(1500, 1200);
   
   kinectConfig();
 }
@@ -34,12 +35,18 @@ public void setup() {
 public void draw() {
 
   background(0);
+  // fill(0,200);
+  // rect(0,0,width,height);
+  lights();
   float[][] map = almacenarMapa();
-  boolean[][] pix = almacenarMapaBool(500);
+  boolean[][] pix = almacenarMapaBool(max);
 
+  float lastX=0,lastY=0;
   int step = 10;
+  boolean distancia;
 
   for (int x = 0; x < width; x+= step) {
+    beginShape(LINES);
     for (int y = 0; y < height; y+= step) {
 
       //normaliza valores del mapeo de la kinect (640,480) al tamaño del canvas
@@ -48,18 +55,38 @@ public void draw() {
 
       float brillo = map( map[kx][ky], min, max, 255, 0);
 
-      fill(brillo, 127);
-      rect(x, y, step, step);
+      fill(brillo);
+      noStroke();
 
-      if (pix[kx][ky]) {
-          //en caso de q pixel sea mayor que el umbral (activar fragmentos)
+      //rect(x, y, step, step);
+
+      distancia = ( abs(y-lastY)  < step );
+
+      if(map[kx][ky] < max && map[kx][ky] > min && pix[kx][ky]){
+        //if(distancia){
+
+
       }
+      if (pix[kx][ky]) {
+        float z = map( map[kx][ky], 0, max, 0,-400 )+400;
+        pushMatrix();
+        translate(x,y,z);
+        stroke(255);
+        point(0,0);
+        //stroke(255);
+        //vertex(x,y,z);
 
+        lastY = y;
+        popMatrix();//en caso de q pixel sea mayor que el umbral (activar fragmentos)
+      }
+      lastX = x;
     }
+    endShape();
   }
+
 }
 class Fragmento{
-
+ 
   PVector posicion, velocidad, aceleracion, rota, velRot;
 
   float tamano, crecimiento;
@@ -91,7 +118,7 @@ class Fragmento{
       velocidad.y *= -1;
       aceleracion.y *= -1;
     }
-    
+
     rota.add(velRot);
   }
 
@@ -120,7 +147,7 @@ public void kinectConfig() { //<>//
   kinect.enableIR(true);
   kinect.enableMirror(true);
 }
-
+ 
 public float[][] almacenarMapa() {
 
   float[][] mapaDeProfundidad = new float [kinect.width][kinect.height];
@@ -193,7 +220,7 @@ public float[][] almacenarMapaAjustado(int _x, int _y) {
 
   return mapaDeProfundidadNorm;
 }
-  public void settings() {  size(800, 600); }
+  public void settings() {  fullScreen(P3D); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "kinekt_prueba_2" };
     if (passedArgs != null) {
