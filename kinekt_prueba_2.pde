@@ -13,7 +13,7 @@ void setup() {
 }
 
 void draw() {
-
+ 
   background(0);
   float[][] map = almacenarMapa();
   boolean[][] pix = almacenarMapaBool(500);

@@ -4,7 +4,7 @@ void kinectConfig() { //<>//
   kinect.enableIR(true);
   kinect.enableMirror(true);
 }
-
+ 
 float[][] almacenarMapa() {
 
   float[][] mapaDeProfundidad = new float [kinect.width][kinect.height];

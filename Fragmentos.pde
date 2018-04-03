@@ -1,5 +1,5 @@
 class Fragmento{
-
+ 
   PVector posicion, velocidad, aceleracion, rota, velRot;
 
   float tamano, crecimiento;
@@ -31,7 +31,7 @@ class Fragmento{
       velocidad.y *= -1;
       aceleracion.y *= -1;
     }
-    
+
     rota.add(velRot);
   }
 
